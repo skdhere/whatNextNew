@@ -24,29 +24,30 @@ export class InterestpagePage {
   cbChecked:Array<any>=[];
   constructor(public navCtrl: NavController, public navParams: NavParams,public api:Api,
     public storage :Storage, public nativeStorage: NativeStorage,public fb:Facebook) {
+
+    //==============Start Api=========================//
   	this.api.post('getInterest', '')
-                .map(res => res.json())
-                .subscribe( data => {
-                    //store data in storage
-                    if (data.success == true) {
+        .map(res => res.json())
+        .subscribe( data => {
+            //store data in storage
+            if (data.success == true) {
 
-                       let new_data = data.data[0];
-                       for(let i=0;i<new_data.length;i++)
-                       {
-                       	console.log(new_data[i]['name']);
-                       	 let int = {"name":new_data[i]['name'],"display_name":new_data[i]['display_name']};
+               let new_data = data.data[0];
+               for(let i=0;i<new_data.length;i++)
+               {
+               	console.log(new_data[i]['name']);
+               	 let int = {"name":new_data[i]['name'],"display_name":new_data[i]['display_name']};
 
-                       	 this.interests.push(int);
-                       }
-                    		
-                    }
-                    else{
-                      
-                    }
-                }, error => {
-                 
+               	 this.interests.push(int);
+               }
+            		
+            }
+            else{
+              
+            }
+        }, error => {
       });
-
+       //==============End Api=========================//
       console.log(this.interests);
   }
 

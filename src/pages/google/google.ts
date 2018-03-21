@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,Platform } from 'ionic-angular';
 import {Http, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
+import { Api} from "../../providers/api";
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { Geolocation } from '@ionic-native/geolocation';
 import {
@@ -38,7 +39,8 @@ export class GooglePage {
               public navParams: NavParams, 
               public geolocation:Geolocation,
               public platform :Platform,
-              private backgroundMode: BackgroundMode
+              private backgroundMode: BackgroundMode,
+              public api: Api
               ) {
 
 
@@ -50,14 +52,36 @@ this.platform.ready().then(() => {
     });
  	this.backgroundMode.enable();
 
+   this.backgroundMode.on("activate").subscribe(()=>{
+       //==============Start Api=========================//
+      this.api.post('test', {"data":2})
+          .map(res => res.json())
+          .subscribe( data => {
+              //store data in storage
+              console.log(data);
+          }, error => {
+        });
+         //==============End Api=========================//
+         // this.demo();
+    });
+    
+ 
  	if(this.backgroundMode.isActive()){
-          alert();
+     //==============Start Api=========================//
+    this.api.post('test', {"data":2})
+        .map(res => res.json())
+        .subscribe( data => {
+            //store data in storage
+            console.log(data);
+        }, error => {
+      });
+
+       //==============End Api=========================//
     };
 
     this.geolocation.getCurrentPosition().then((resp) => {
        this.current_lat = resp.coords.latitude;
        this.current_lng = resp.coords.longitude;
-       console.log(this.current_lat);
        this.loadPoint();
       
     }).catch((error) => {
@@ -68,37 +92,44 @@ this.platform.ready().then(() => {
    
   }
 
+  demo()
+  {
+
+    //==============Start Api=========================//
+    this.api.post('test', {"data":2})
+        .map(res => res.json())
+        .subscribe( data => {
+            //store data in storage
+            console.log(data);
+        }, error => {
+      });
+     //==============End Api=========================//
+     setTimeout(() => {
+        // this.navCtrl.popToRoot();
+        // might try this instead
+        this.demo();
+    }, 300);
+  }
+
   loadPoint()
   {
       let types =['train_station','restaurant','bar','atm','gym'];
+      types.forEach(element => {
+          this.http.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+this.current_lat+','+this.current_lng+'&radius=500&type='+element+'&key=%20AIzaSyBg1KqM98DIC8TA1ngpS3luuP1A-_aQsfg').map(res => res.json()).subscribe(data => {
+              
+                Object.keys(data.results).forEach(key=> {
 
+                      let lat ={"lat":data.results[key]['geometry']['location'].lat,"lng":data.results[key]['geometry']['location'].lng,'type':element,'name':data.results[key]['name'],'icon':data.results[key]['icon']};
 
-     
-       types.forEach(element => {
-        console.log(this.current_lat+ " latitude");
-        console.log(this.current_lng+ " longitude");
-
-        this.http.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+this.current_lat+','+this.current_lng+'&radius=500&type='+element+'&key=%20AIzaSyBg1KqM98DIC8TA1ngpS3luuP1A-_aQsfg').map(res => res.json()).subscribe(data => {
-            
-              Object.keys(data.results).forEach(key=> {
-
-                    let lat ={"lat":data.results[key]['geometry']['location'].lat,"lng":data.results[key]['geometry']['location'].lng,'type':element,'name':data.results[key]['name'],'icon':data.results[key]['icon']};
-
-                    this.locations.push(lat);
-                });
+                      this.locations.push(lat);
+                  });
+          });
         });
-
-        });
-     
-     console.log(this.locations);
-
-     this.loadMap();
+    this.loadMap();
   }
 
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad GooglePage');
-    // this.loadPoint();
   }
 
   ngAfterViewInit() {
@@ -108,9 +139,6 @@ this.platform.ready().then(() => {
     }
 
   loadMap() {
-
-    console.log(this.current_lat);
-    console.log(this.current_lng);
 
     let mapOptions: GoogleMapOptions = {
       camera: {
@@ -147,7 +175,7 @@ this.platform.ready().then(() => {
           };
 
         let loc = this.locations[k];
-        console.log(loc);
+       
         this.map.addMarker({
           title: loc.name,
           icon: image,
@@ -158,7 +186,7 @@ this.platform.ready().then(() => {
           }
         })
         .then(marker => {
-          console.log("456");
+         
           marker.on(GoogleMapsEvent.MARKER_CLICK)
             .subscribe(() => {
               alert('clicked');
