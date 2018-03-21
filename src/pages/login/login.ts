@@ -46,8 +46,8 @@ export class LoginPage {
         this.fb.api("/me?fields=name,gender,email", params)
                 .then((user) => {
                     user.picture = "https://graph.facebook.com/" + userId + "/picture?type=large";
-
                     console.log(user);
+                    user.loginFlag = "facebook";
                     this.api.post('login',user)
                     .map(res => res.json())
                     .subscribe( data => {

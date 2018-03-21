@@ -99,11 +99,13 @@
     <plugin name="cordova.plugins.diagnostic" spec="^4.0.3" />
     <plugin name="cordova-plugin-googlemaps" spec="^2.2.8">
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyDPlccfGa3xToFZhOTr8-l-JuqfwmWNMho" />
-        <variable name="PLAY_SERVICES_VERSION" value="11.8.0" />
+        <variable name="PLAY_SERVICES_VERSION" value="11.+" />
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="24.1.0" />
     </plugin>
     <plugin name="cordova-plugin-camera" spec="^4.0.2" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you" />
     </plugin>
+    <plugin name="cordova-sqlite-storage" spec="^2.2.1" />
+    <plugin name="cordova-plugin-background-mode" spec="^0.7.2" />
 </widget>

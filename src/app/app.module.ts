@@ -13,6 +13,7 @@ import { Api } from '../providers/api';
 import { IonicStorageModule } from '@ionic/storage';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
+import { BackgroundMode } from '@ionic-native/background-mode';
 // import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -52,7 +53,8 @@ import { Geolocation } from '@ionic-native/geolocation';
     Storage,
     GoogleMaps,
     Api,
-    Geolocation
+    Geolocation,
+    BackgroundMode
   ]
 })
 export class AppModule {}
