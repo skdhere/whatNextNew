@@ -3,8 +3,8 @@ import { IonicPage, NavController, NavParams,Platform } from 'ionic-angular';
 import {Http, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Api} from "../../providers/api";
-import { BackgroundMode } from '@ionic-native/background-mode';
 import { Geolocation } from '@ionic-native/geolocation';
+import { BackgroundMode } from '@ionic-native/background-mode';
 import {
  GoogleMaps,
  GoogleMap,
@@ -96,19 +96,24 @@ this.platform.ready().then(() => {
   {
 
     //==============Start Api=========================//
-    this.api.post('test', {"data":2})
-        .map(res => res.json())
-        .subscribe( data => {
-            //store data in storage
-            console.log(data);
-        }, error => {
-      });
+    // this.api.post('test', {"data":2})
+    //     .map(res => res.json())
+    //     .subscribe( data => {
+    //         //store data in storage
+    //         console.log(data);
+    //     }, error => {
+    //   });
      //==============End Api=========================//
      setTimeout(() => {
         // this.navCtrl.popToRoot();
         // might try this instead
         this.demo();
     }, 300);
+  }
+
+  goToList()
+  {
+    this.navCtrl.push('ListsPage',{"lat":this.current_lat,"lng":this.current_lat});
   }
 
   loadPoint()
@@ -148,11 +153,16 @@ this.platform.ready().then(() => {
         },
         zoom: 18,
         tilt: 30
+      },
+      gestures:{
+        rotate:false,
+        tilt:false,
+        scroll:false
       }
     };
    
     this.map = GoogleMaps.create('map_canvas', mapOptions);
-
+    this.map.setVisible(true);
     // Wait the MAP_READY before using any methods.
     this.map.on(GoogleMapsEvent.MAP_READY).subscribe(() => {console.log('Map is ready!')});
     this.map.one(GoogleMapsEvent.MAP_READY)
@@ -189,7 +199,7 @@ this.platform.ready().then(() => {
          
           marker.on(GoogleMapsEvent.MARKER_CLICK)
             .subscribe(() => {
-              alert('clicked');
+              // alert('clicked');
             });
         });
     }

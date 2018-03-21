@@ -4,28 +4,18 @@
             <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      HOME
+      You Can do...
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 
 <ion-content padding>
-  <!-- <ion-list>
-        <ion-list-header></ion-list-header>
+<ion-list>
         <ion-item *ngFor='let value of locations; trackBy: index;'>
         	{{value.name}}<br>
         	{{value.type}} {{value.lat}} , {{value.lng}} 
         	
         </ion-item>
-    </ion-list> -->
-   <div id="map_canvas"></div>
-   <ion-fab top right edge>
-    <button (click)="showLocations()" ion-fab color="danger">
-      <ion-icon name="ios-refresh"></ion-icon>
-    </button>
-  </ion-fab>
-
-    <button ion-button text-center (click)="goToList()" color="danger" id="lodermodal">What Next</button>
-
+    </ion-list>
 </ion-content>
