@@ -45,9 +45,30 @@ export class LoginPage {
         //Getting name and gender properties
         this.fb.api("/me?fields=name,gender,email", params)
                 .then((user) => {
+
+
                     user.picture = "https://graph.facebook.com/" + userId + "/picture?type=large";
                     console.log(user);
+
                     user.loginFlag = "facebook";
+
+                   this.token = '';
+                   this.nativeStorage.setItem('user',
+                    {
+                        name: user.name,
+                        gender: user.gender,
+                        picture: user.picture,
+                        loginFlag: 'facebook',
+                        token :this.token
+                    })
+                    .then(() => {
+                        nav.push('InterestpagePage');
+                    },(error) => {
+                        console.log(error);
+                    })
+
+                    nav.push('InterestpagePage');
+                    
                     this.api.post('login',user)
                     .map(res => res.json())
                     .subscribe( data => {
@@ -55,32 +76,35 @@ export class LoginPage {
                         if (data.success == true) {
 
                            this.token = data.data['token'];
+                           this.nativeStorage.setItem('user',
+                            {
+                                name: user.name,
+                                gender: user.gender,
+                                picture: user.picture,
+                                loginFlag: 'facebook',
+                                token :this.token
+                            })
+                            .then(() => {
+                                nav.push('InterestpagePage');
+                            },(error) => {
+                                console.log(error);
+                            })
+
+                           nav.push('InterestpagePage');
                         }
                         else{
                           
                         }
                     }, error => {
                      
-        });
+                        });
 
         //now we have the users info, let's save it in the NativeStorage
-        this.nativeStorage.setItem('user',
-        {
-            name: user.name,
-            gender: user.gender,
-            picture: user.picture,
-            loginFlag: 'facebook',
-            token :this.token
-        })
-        .then(() => {
-            nav.push('InterestpagePage');
-        },(error) => {
-            console.log(error);
-        })
-        })
-        }, (error) => {
-            console.log(error);
-        });
+                        
+                })
+                }, (error) => {
+                    console.log(error);
+                });
     }
 
     doGoogleLogin(){

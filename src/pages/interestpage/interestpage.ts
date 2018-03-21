@@ -55,6 +55,8 @@ export class InterestpagePage {
     let int  = this.chkinterests.join(',');
     let user = this.nativeStorage.getItem('user');
     console.log(user);
+
+    
     this.api.post('getInterest',{"interest":int,'username':user})
                 .map(res => res.json())
                 .subscribe( data => {

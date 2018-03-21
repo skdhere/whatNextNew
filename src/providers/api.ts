@@ -13,7 +13,8 @@ import { Events } from 'ionic-angular';
  */
 @Injectable()
 export class Api {
-    url: string = 'http://kumar7.com/whatnext_server/v1';
+    // url: string = 'http://kumar7.com/whatnext_server/v1';
+    url: string = 'http://192.168.0.19/whatnext_server/v1';
     // url: string = 'http://localhost/app/Github/agribridge-api/v1';
     // url: string = 'http://sqoreyard.com/sqyardpanel/rest/v1';
     options: RequestOptions;
