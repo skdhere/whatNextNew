@@ -54,13 +54,13 @@ this.platform.ready().then(() => {
 
    this.backgroundMode.on("activate").subscribe(()=>{
        //==============Start Api=========================//
-      this.api.post('test', {"data":2})
-          .map(res => res.json())
-          .subscribe( data => {
-              //store data in storage
-              console.log(data);
-          }, error => {
-        });
+      // this.api.post('test', {"data":2})
+      //     .map(res => res.json())
+      //     .subscribe( data => {
+      //         //store data in storage
+      //         console.log(data);
+      //     }, error => {
+      //   });
          //==============End Api=========================//
          // this.demo();
     });

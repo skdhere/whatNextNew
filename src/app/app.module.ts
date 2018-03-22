@@ -14,6 +14,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { BackgroundMode } from '@ionic-native/background-mode';
+import { Device } from '@ionic-native/device';
 // import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -54,7 +55,8 @@ import { BackgroundMode } from '@ionic-native/background-mode';
     GoogleMaps,
     Api,
     Geolocation,
-    BackgroundMode
+    BackgroundMode,
+    Device
   ]
 })
 export class AppModule {}

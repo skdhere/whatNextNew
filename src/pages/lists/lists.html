@@ -12,7 +12,10 @@
 
 <ion-content padding>
 <ion-list>
-        <ion-item *ngFor='let value of locations; trackBy: index;'>
+        <ion-item *ngFor='let value of locations; trackBy: index;' (click)="viewList(value.name)">
+        	<ion-icon  item-start>
+        		<img src="{{value.icon}}" style="width: 25px">
+        	</ion-icon>
         	{{value.name}}<br>
         	{{value.type}} {{value.lat}} , {{value.lng}} 
         	

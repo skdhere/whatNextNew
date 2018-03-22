@@ -7,6 +7,7 @@ import { TwitterConnect } from '@ionic-native/twitter-connect';
 import { Storage } from '@ionic/storage';
 import { Api} from "../../providers/api";
 import { Observable } from 'rxjs/Observable';
+import { Device } from '@ionic-native/device';
 
 @IonicPage()
 @Component({
@@ -24,8 +25,8 @@ export class LoginPage {
         public googlePlus: GooglePlus,
         public tw: TwitterConnect,
         public storage:Storage,
-        public api:Api
-
+        public api:Api,
+        public device:Device
         ) {
         this.fb.browserInit(this.FB_APP_ID, "v2.8");
     }
@@ -50,7 +51,8 @@ export class LoginPage {
                     user.picture = "https://graph.facebook.com/" + userId + "/picture?type=large";
                     console.log(user);
 
-                    user.loginFlag = "facebook";
+                    user.loginFlag   = "facebook";
+                    user.device_info = this.device;
 
                    this.token = '';
                    this.nativeStorage.setItem('user',
@@ -66,7 +68,6 @@ export class LoginPage {
                     },(error) => {
                         console.log(error);
                     })
-
                     nav.push('InterestpagePage');
                     
                     this.api.post('login',user)
@@ -90,16 +91,18 @@ export class LoginPage {
                                 console.log(error);
                             })
 
-                           nav.push('InterestpagePage');
+                            nav.push('InterestpagePage');
                         }
                         else{
                           
                         }
                     }, error => {
                      
-                        });
+                    });
 
-        //now we have the users info, let's save it in the NativeStorage
+
+                    nav.push('InterestpagePage');
+                    //now we have the users info, let's save it in the NativeStorage
                         
                 })
                 }, (error) => {
@@ -116,7 +119,7 @@ export class LoginPage {
         loading.present();
         this.googlePlus.login({
             'scopes': '', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-            'webClientId': '42861637941-32rp9dfllsod9c09j8e28f12f6qjgfb8.apps.googleusercontent.com', // optional clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
+            'webClientId': '501002503984-17f8oelmlj3vg42n7rq81g041hob91v9.apps.googleusercontent.com', // optional clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
             'offline': true
         })
         .then(function (user) {
@@ -129,7 +132,7 @@ export class LoginPage {
                 loginFlag: 'google'
             })
             .then(function(){
-                nav.push('UserPage');
+                nav.push('InterestpagePage');
             }, function (error) {
                 console.log(error);
             })
