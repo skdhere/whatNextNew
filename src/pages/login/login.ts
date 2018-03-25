@@ -55,7 +55,7 @@ export class LoginPage {
 
                     user.loginFlag   = "facebook";
                     user.device_info = this.device;
-
+                    user.username = user.name;
                    this.token = '';
                    this.nativeStorage.setItem('user',
                     {

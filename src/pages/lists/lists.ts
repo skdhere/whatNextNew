@@ -21,7 +21,7 @@ export class ListsPage {
   current_lat:any;
   current_lng:any;
   locations:Array<any> = [];
-
+  types:Array<any> = [];
   constructor(public navCtrl: NavController,
               public http:Http,
               public navParams: NavParams, 
@@ -32,14 +32,15 @@ export class ListsPage {
   	this.current_lat ="19.019552";
   	this.current_lng ="72.8382497";
     // this.loadPoint();
+         
 
 		this.platform.ready().then(() => {
-	     
+         this.getInterest();
 	     	 this.geolocation.getCurrentPosition().then((resp) => {
 	           this.current_lat = resp.coords.latitude;
 	           this.current_lng = resp.coords.longitude;
              this.getInterest();
-	           this.loadPoint();
+	           
 	          
 	        }).catch((error) => {
 	          console.log('Error getting location', error);
@@ -86,20 +87,23 @@ export class ListsPage {
   
   getInterest()
   {
+    
  //==============Start Api=========================//
         this.api.post('getUserInterest','')
           .map(res => res.json())
           .subscribe( data => {
               //store data in storage
-              console.log(data);
+              this.types = data.data;
+              this.loadPoint();
           }, error => {
         });
+
         //==============End Api=========================//
   }
 
   loadPoint()
   {
-      let types =['train_station','restaurant','bar','atm','gym'];
+      let types =this.types;
       console.log(types);
       types.forEach(element => {
           this.http.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+this.current_lat+','+this.current_lng+'&radius=500&type='+element+'&key=%20AIzaSyBg1KqM98DIC8TA1ngpS3luuP1A-_aQsfg').map(res => res.json()).subscribe(data => {

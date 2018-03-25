@@ -23,21 +23,7 @@ export class MyApp {
     public api:Api
   ) {
     platform.ready().then(() => {
-
-
-      //==============Start Api=========================//
-      this.api.post('interest', '')
-        .map(res => res.json())
-        .subscribe( data => {
-            //store data in storage
-            if (data.success == true) {
-            }
-            else{
-              
-            }
-        }, error => {
-      });
-      //==============End Api=========================//
+      
 
       statusBar.overlaysWebView(true);
       statusBar.overlaysWebView(false);
@@ -68,7 +54,6 @@ export class MyApp {
         this.splashScreen.hide();
       }, (error) => {
         //we don't have the user data so we will ask him to log in
-       
         this.nav.push('LoginPage');
         this.splashScreen.hide();
       });
