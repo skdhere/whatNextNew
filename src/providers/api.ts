@@ -6,31 +6,35 @@ import { Http, RequestOptions, URLSearchParams, Headers } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
 import { Events } from 'ionic-angular';
-
+import { NativeStorage } from '@ionic-native/native-storage';
 
 /**
  * Api is a generic REST Api handler. Set your API url first.
  */
 @Injectable()
 export class Api {
-    // url: string = 'http://kumar7.com/whatnext_server/v1';
-    url: string = 'http://192.168.0.13/what_next_api/v1';
+    url: string = 'http://acrefin.com/api1/v1';
+    // url: string = 'http://localhost/whatnext_server/v1';
+    
+    // url: string = 'http://192.168.0.13/what_next_api/v1';
     // url: string = 'http://192.168.0.19/whatnext_server/v1';
-    // url: string = 'http://localhost/app/Github/agribridge-api/v1';
-    // url: string = 'http://sqoreyard.com/sqyardpanel/rest/v1';
+ 
     options: RequestOptions;
     activeCalls: number = 0;
 
-    constructor(public http: Http, private storage: Storage, public events?: Events) {
+
+    constructor(public http: Http,
+    public nativS:NativeStorage, private storage: Storage, public events?: Events) {
         this.storage.set('httpStatus', 'false');
     }
 
     setHeaders(){
+        let user = this.nativS.getItem('user');
+        
         let myHeaders: Headers = new Headers;
         myHeaders.set('Content-Type', 'application/x-www-form-urlencoded');
-       
-        myHeaders.set('Authorization', '');
-        this.options = new RequestOptions({ headers: myHeaders });
+        myHeaders.set('Authorization', '12e63aefe5f656e62325e47a5792c2b9');
+        this.options = new RequestOptions({ headers: myHeaders});
     }
 
     get(endpoint: string, params?: any) {
@@ -50,7 +54,7 @@ export class Api {
     }
 
     post(endpoint: string, body: any, ex_options?: any) {
-        // this.setHeaders();
+         this.setHeaders();
         let params = new URLSearchParams();
         for(let key in body){
             if(Array.isArray(body[key])){
@@ -69,7 +73,7 @@ export class Api {
             }
         }
 
-        
+        console.log(this.options);
         this.httpCallRequested();
         return this.http.post(this.url + '/' + endpoint, params, this.options)
         .finally(() => {

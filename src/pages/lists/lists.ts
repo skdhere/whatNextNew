@@ -38,6 +38,7 @@ export class ListsPage {
 	     	 this.geolocation.getCurrentPosition().then((resp) => {
 	           this.current_lat = resp.coords.latitude;
 	           this.current_lng = resp.coords.longitude;
+             this.getInterest();
 	           this.loadPoint();
 	          
 	        }).catch((error) => {
@@ -83,6 +84,19 @@ export class ListsPage {
    actionSheet.present();
   }
   
+  getInterest()
+  {
+ //==============Start Api=========================//
+        this.api.post('getUserInterest','')
+          .map(res => res.json())
+          .subscribe( data => {
+              //store data in storage
+              console.log(data);
+          }, error => {
+        });
+        //==============End Api=========================//
+  }
+
   loadPoint()
   {
       let types =['train_station','restaurant','bar','atm','gym'];
