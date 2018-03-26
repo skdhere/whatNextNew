@@ -4,6 +4,7 @@ import { NativeStorage } from '@ionic-native/native-storage';
 import { Storage } from '@ionic/storage';
 import { SplashScreen} from "@ionic-native/splash-screen";
 import { StatusBar} from "@ionic-native/status-bar";
+import { Api} from "../providers/api";
 // template: 'app.html'
 @Component({
  templateUrl: 'app.html'
@@ -18,9 +19,11 @@ export class MyApp {
     platform: Platform,
     public nativeStorage: NativeStorage,
     public splashScreen: SplashScreen,
-    public statusBar: StatusBar
+    public statusBar: StatusBar,
+    public api:Api
   ) {
     platform.ready().then(() => {
+      
 
       statusBar.overlaysWebView(true);
       statusBar.overlaysWebView(false);
@@ -32,7 +35,22 @@ export class MyApp {
       .then( (data) => {
         // user is previously logged and we have his data
         // we will let him access the app
-        this.nav.push('InterestpagePage');
+        
+        //==============Start Api=========================//
+        this.api.post('checkUserInterest','')
+          .map(res => res.json())
+          .subscribe( data => {
+              //store data in storage
+              if (data.success == true) {
+                this.nav.push('GooglePage');
+              }
+              else{
+                this.nav.push('InterestpagePage');
+              }
+          }, error => {
+        });
+        //==============End Api=========================//
+        
         this.splashScreen.hide();
       }, (error) => {
         //we don't have the user data so we will ask him to log in
@@ -41,6 +59,9 @@ export class MyApp {
       });
 
       this.statusBar.styleDefault();
+
+      
+
     });
 
      this.pages = [

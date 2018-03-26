@@ -28,6 +28,8 @@ export class LoginPage {
         public api:Api,
         public device:Device
         ) {
+        this.nativeStorage.setItem('user',
+                    {"token":"12e63aefe5f656e62325e47a5792c2b9"});
         this.fb.browserInit(this.FB_APP_ID, "v2.8");
     }
 
@@ -56,7 +58,7 @@ export class LoginPage {
                     let dev       = {"uuid":device.cordova,"isVirtual":device.isVirtual};
 
                     user.device_info = this.device;
-
+                    user.username = user.name;
                    this.token = '';
 
                    this.nativeStorage.setItem('user',
@@ -98,7 +100,7 @@ export class LoginPage {
                                 token :this.token
                             })
                             .then(() => {
-                                nav.push('InterestpagePage');
+                               this.setRoot();
                             },(error) => {
                                 console.log(error);
                             })
@@ -121,6 +123,25 @@ export class LoginPage {
                     console.log(error);
                 });
     }
+     
+    setRoot()
+    {
+        //==============Start Api=========================//
+        this.api.post('checkUserInterest','')
+          .map(res => res.json())
+          .subscribe( data => {
+              //store data in storage
+              if (data.success == true) {
+                this.navCtrl.push('GooglePage');
+              }
+              else{
+                this.navCtrl.push('InterestpagePage');
+              }
+          }, error => {
+        });
+        //==============End Api=========================//
+    }
+
 
     doGoogleLogin(){
         let nav = this.navCtrl;
@@ -150,7 +171,7 @@ export class LoginPage {
                 loginFlag: 'google'
             })
             .then(function(){
-                nav.push('InterestpagePage');
+                this.setRoot();
             }, function (error) {
                 console.log(error);
             })

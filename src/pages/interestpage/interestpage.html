@@ -18,7 +18,7 @@
       <ion-item *ngFor='let value of interests; trackBy: index;'>
         <ion-label>{{value.display_name}}</ion-label>
         <!-- checked="true" -->
-        <ion-checkbox  (ionChange)="updateCheckedOptions(value.name, $event)" color="danger" ></ion-checkbox>
+        <ion-checkbox  (ionChange)="updateCheckedOptions(value.id, $event)" color="danger" ></ion-checkbox>
       </ion-item>
   </ion-list>
   <ion-fab top right edge>
