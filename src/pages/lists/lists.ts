@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,Platform ,ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,Platform ,ActionSheetController, LoadingController } from 'ionic-angular';
 import {Http, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Api} from "../../providers/api";
@@ -22,13 +22,15 @@ export class ListsPage {
   current_lng:any;
   locations:Array<any> = [];
   types:Array<any> = [];
+  loading:any;
   constructor(public navCtrl: NavController,
               public http:Http,
               public navParams: NavParams, 
               public geolocation:Geolocation,
               public platform :Platform,
               public api: Api,
-              public actionSheet:ActionSheetController) {
+              public actionSheet:ActionSheetController,
+              public loadingCtrl :LoadingController) {
   	this.current_lat ="19.019552";
   	this.current_lng ="72.8382497";
     // this.loadPoint();
@@ -40,16 +42,27 @@ export class ListsPage {
 	           this.current_lat = resp.coords.latitude;
 	           this.current_lng = resp.coords.longitude;
              this.getInterest();
-	           
-	          
 	        }).catch((error) => {
 	          console.log('Error getting location', error);
 	        });
 	    });
   }
 
+  getLoader()
+  {
+    let loading = this.loadingCtrl.create({
+      content:"Please Wait..."
+    });
+    return loading;
+  }
+
+
+
   viewList(name)
   {
+    this.loading = this.getLoader();
+    this.loading.present();
+
   	let actionSheet = this.actionSheet.create({
      title: name,
      buttons: [
@@ -83,12 +96,14 @@ export class ListsPage {
    });
 
    actionSheet.present();
+   this.loading.dismiss();
   }
   
   getInterest()
   {
-    
- //==============Start Api=========================//
+    this.loading = this.getLoader();
+    this.loading.present();
+    //==============Start Api=========================//
         this.api.post('getUserInterest','')
           .map(res => res.json())
           .subscribe( data => {
@@ -97,7 +112,7 @@ export class ListsPage {
               this.loadPoint();
           }, error => {
         });
-
+    this.loading.dismiss();
         //==============End Api=========================//
   }
 
@@ -115,6 +130,7 @@ export class ListsPage {
         });
 
       console.log(this.locations);
+      this.loading.dismiss();
   }
 
   ionViewDidLoad() {

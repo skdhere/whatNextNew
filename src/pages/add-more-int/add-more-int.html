@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar color="app">
+  	<button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Add Interests
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <br>
+ <!--  <ion-list>
+    <ion-item >
+      <ion-label class="badge">{{value.display_name}}</ion-label>
+      
+      <ion-checkbox  (ionChange)="updateCheckedOptions(value.id, $event)" color="danger" ></ion-checkbox>
+    </ion-item>
+
+  </ion-list> -->
+
+<ion-card *ngFor='let value of interests; trackBy: index;'>
+
+<ion-card-content>
+  <ion-grid>
+  <ion-row>
+    <ion-col col-4>
+     <ion-checkbox (ionChange)="updateCheckedOptions(value.id, $event)" color="danger" ></ion-checkbox>
+   </ion-col>
+  
+    <ion-col col-8>
+    {{value.display_name}}
+  </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-card-content>
+
+</ion-card>
+
+  <div *ngIf="interests.length ==0" class="no-more-item">
+        <h6>No more Interest available.</h6>
+  </div>
+  <ion-fab top right edge *ngIf="interests.length !=0">
+    <button (click)="saveInterest()" ion-fab color="secondary">
+      <ion-icon name="checkmark" ></ion-icon>
+    </button>
+  </ion-fab>
+
+</ion-content>

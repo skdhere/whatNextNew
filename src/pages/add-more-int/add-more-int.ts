@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController} from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { NativeStorage } from '@ionic-native/native-storage';
 import { Storage } from '@ionic/storage';
 import { Api} from "../../providers/api";
@@ -7,29 +7,35 @@ import { Observable } from 'rxjs/Observable';
 import { Http, RequestOptions, Response, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+
 /**
- * Generated class for the InterestpagePage page.
+ * Generated class for the AddMoreIntPage page.
  *
  * See http://ionicframework.com/docs/components/#navigation for more info
  * on Ionic pages and navigation.
  */
 @IonicPage()
 @Component({
-  selector: 'page-interestpage',
-  templateUrl: 'interestpage.html',
+  selector: 'page-add-more-int',
+  templateUrl: 'add-more-int.html',
 })
-export class InterestpagePage {
+export class AddMoreIntPage {
 
   interests:Array<any>=[];
   chkinterests:Array<any>=[];
   cbChecked:Array<any>=[];
-  loading:any;
   constructor(public navCtrl: NavController, public navParams: NavParams,public api:Api,
-    public storage :Storage, public nativeStorage: NativeStorage , public loadingCtrl:LoadingController) {
-
+    public storage :Storage, public nativeStorage: NativeStorage,public loadingCtrl :LoadingController) {
+  	
     //==============Start Api=========================//
-    this.getLoader();
-  	this.api.post('getInterest','')
+    let loading = this.getLoader();
+    loading.present();
+    // this.interests =[{'name':"demo","display_name":"demo",'id':1},
+    //                  {'name':"demo","display_name":"demo",'id':1},
+    //                  {'name':"demo","display_name":"demo",'id':1},
+    //                  {'name':"demo","display_name":"demo",'id':1}];
+                     
+    this.api.post('addMoreInterest','')
         .map(res => res.json())
         .subscribe( data => {
             //store data in storage
@@ -39,50 +45,64 @@ export class InterestpagePage {
                let new_data = data.data;
                for(let i=0;i<new_data.length;i++)
                {
-               	console.log(new_data[i]['name']);
-               	 let int = {"id":new_data[i]['id'],"name":new_data[i]['name'],"display_name":new_data[i]['display_name']};
-
-               	 this.interests.push(int);
+                 console.log(new_data[i]['name']);
+                  let int = {"id":new_data[i]['id'],"name":new_data[i]['name'],"display_name":new_data[i]['display_name']};
+                  this.interests.push(int);
                }
-            		
             }
             else{
-              
-            }
+          }
         }, error => {
       });
       //==============End Api=========================//
       console.log(this.interests);
-      this.loading.dismiss();
+      loading.dismiss();
   }
 
   getLoader()
   {
-      this.loading = this.loadingCtrl.create({
+      let loading = this.loadingCtrl.create({
             content: 'Please Wait...'
         });
+
+      return loading;
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad AddMoreIntPage');
   }
 
   saveInterest()
   {
-    this.getLoader();
+    let loading = this.getLoader();
+    loading.present();
     let int  = this.chkinterests.join(',');
     let user = this.nativeStorage.getItem('user');
     console.log(user);
     
-    this.api.post('userInterest',{"interest_ids":int,'username':user,"device_id":1})
-                .map(res => res.json())
-                .subscribe( data => {
-                  console.log(data);
-                  this.navCtrl.push('GooglePage');
+    this.api.post('adduserInterest',{"interest_ids":int,'username':user,"device_id":1})
+        .map(res => res.json())
+        .subscribe( data => {
+          console.log(data);
+          let callback = this.navParams.get("callback") || false;
+            if (callback) {
+                callback(true).then(() => {
+                    this.navCtrl.pop();
                 });
-    this.loading.dismiss();
+            }
+            else {
+                this.navCtrl.setRoot('GooglePage');
+            }
+        },error=>{
+          console.log(error);
+        });
+        loading.dismiss();
   }
 
   get diagnostic() { return JSON.stringify(this.cbChecked); }
 
   updateCheckedOptions(chBox, event) {
-      this.getLoader();
+
       var cbIdx = this.chkinterests.indexOf(chBox);
        console.log(cbIdx);
       if(event.checked) {
@@ -94,12 +114,8 @@ export class InterestpagePage {
              this.chkinterests.splice(cbIdx,1);
           }
       }
-      this.loading.dismiss();
-      console.log(this.chkinterests);
-  }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad InterestpagePage');
+      console.log(this.chkinterests);
   }
 
 }

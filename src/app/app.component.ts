@@ -1,81 +1,138 @@
-import { Component, ViewChild } from '@angular/core';
-import { Platform, Nav } from 'ionic-angular';
-import { NativeStorage } from '@ionic-native/native-storage';
-import { Storage } from '@ionic/storage';
-import { SplashScreen} from "@ionic-native/splash-screen";
-import { StatusBar} from "@ionic-native/status-bar";
-import { Api} from "../providers/api";
+import {
+    Component,
+    ViewChild
+} from '@angular/core';
+import {
+    Platform,
+    Nav,
+    LoadingController
+} from 'ionic-angular';
+import {
+    NativeStorage
+} from '@ionic-native/native-storage';
+import {
+    Storage
+} from '@ionic/storage';
+import {
+    SplashScreen
+} from "@ionic-native/splash-screen";
+import {
+    StatusBar
+} from "@ionic-native/status-bar";
+import {
+    Api
+} from "../providers/api";
+import {
+    UserProvider
+} from "../providers/user";
 // template: 'app.html'
 @Component({
- templateUrl: 'app.html'
- })
+    templateUrl: 'app.html'
+})
 export class MyApp {
 
-  @ViewChild(Nav) nav: Nav;
-  rootPage: any;
-  pages: Array<{title: string, component: any, icon:string}>;
+    @ViewChild(Nav) nav: Nav;
+    rootPage: any;
+    pages: Array < {
+        title: string,
+        component: any,
+        icon: string
+    } > ;
+    username:string;
+    constructor(
+        platform: Platform,
+        public nativeStorage: NativeStorage,
+        public splashScreen: SplashScreen,
+        public statusBar: StatusBar,
+        public api: Api,
+        public loadingCtrl:LoadingController,
+        public currentUser : UserProvider
+    ) {
+        platform.ready().then(() => {
 
-  constructor(
-    platform: Platform,
-    public nativeStorage: NativeStorage,
-    public splashScreen: SplashScreen,
-    public statusBar: StatusBar,
-    public api:Api
-  ) {
-    platform.ready().then(() => {
-      
+            this.username = this.currentUser.name;
+            
+            setTimeout(() => {
+                statusBar.overlaysWebView(true);
+                statusBar.overlaysWebView(false);
+                statusBar.overlaysWebView(true);
+                statusBar.backgroundColorByHexString("#33000000");
+            }, 300);
 
-      statusBar.overlaysWebView(true);
-      statusBar.overlaysWebView(false);
-      statusBar.overlaysWebView(true);
-      statusBar.backgroundColorByHexString("#33000000");
-      // Here we will check if the user is already logged in
-      // because we don't want to ask users to log in each time they open the app
-      this.nativeStorage.getItem('user')
-      .then( (data) => {
-        // user is previously logged and we have his data
-        // we will let him access the app
-        
-        //==============Start Api=========================//
-        this.api.post('checkUserInterest','')
-          .map(res => res.json())
-          .subscribe( data => {
-              //store data in storage
-              if (data.success == true) {
-                this.nav.push('GooglePage');
-              }
-              else{
-                this.nav.push('InterestpagePage');
-              }
-          }, error => {
+            // Here we will check if the user is already logged in
+            // because we don't want to ask users to log in each time they open the app
+            this.nativeStorage.getItem('user')
+                .then((data) => {
+                    console.log(data);
+                    //==============Start Api=========================//
+                    this.api.post('checkUserInterest', '')
+                        .map(res => res.json())
+                        .subscribe(data => {
+                            //store data in storage
+                            if (data.success == true) {
+                                this.nav.setRoot('GooglePage');
+                            } else {
+                                this.nav.setRoot('InterestpagePage');
+                            }
+                        }, error => {
+                              this.nav.setRoot('GooglePage');
+                        });
+                    //==============End Api=========================//
+                    this.splashScreen.hide();
+                }, (error) => {
+                    //we don't have the user data so we will ask him to log in
+                    this.nav.setRoot('LoginPage');
+                    this.splashScreen.hide();
+                });
+            this.statusBar.styleDefault();
+            this.splashScreen.hide();
         });
-        //==============End Api=========================//
-        
-        this.splashScreen.hide();
-      }, (error) => {
-        //we don't have the user data so we will ask him to log in
-        this.nav.push('LoginPage');
-        this.splashScreen.hide();
-      });
 
-      this.statusBar.styleDefault();
-
-      
-
-    });
-
-     this.pages = [
-            { title: 'Home',       component: 'HomePage',      icon: 'home'},
-            { title: 'My Interest', component: 'MyinterestPage',   icon: 'ios-heart'},
+        this.pages = [{
+                title: 'Home',
+                component: 'GooglePage',
+                icon: 'home'
+            },
+            {
+                title: 'My Interest',
+                component: 'MyinterestPage',
+                icon: 'ios-heart'
+            },
             // { title: 'Help',       component: 'SlidesPage',    icon: 'help-buoy'},
         ];
-  }
+    }
 
 
- logOut()
- {
-   this.nativeStorage.remove('user');
-   this.nav.setRoot('LoginPage');
- }
+    logOut() {
+
+        let loading = this.getLoader();
+        loading.present();
+        this.nativeStorage.remove('user');
+        this.nativeStorage.clear();
+        setTimeout(()=>{
+
+                this.nav.setRoot('LoginPage');
+                loading.dismiss();
+        },300)
+    }
+
+    openPage(p) {
+        if (p.component == "GooglePage") {
+            this.nav.setRoot('GooglePage');
+        } else {
+
+            this.nav.push(p.component);
+        }
+
+    }
+
+    getLoader()
+    {
+        let loading = this.loadingCtrl.create({
+            content:"Please Wail..."
+        })
+
+        return loading;
+    }
 
 }

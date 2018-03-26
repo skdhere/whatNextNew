@@ -7,7 +7,7 @@ import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
 import { Events } from 'ionic-angular';
 import { NativeStorage } from '@ionic-native/native-storage';
-
+import { UserProvider } from './user';
 /**
  * Api is a generic REST Api handler. Set your API url first.
  */
@@ -22,18 +22,37 @@ export class Api {
     options: RequestOptions;
     activeCalls: number = 0;
 
-
+    userToken:string;
     constructor(public http: Http,
-    public nativS:NativeStorage, private storage: Storage, public events?: Events) {
+    public nativS:NativeStorage, 
+    public currentUser:UserProvider,
+    private storage: Storage, 
+    public events?: Events) {
         this.storage.set('httpStatus', 'false');
     }
 
     setHeaders(){
-        let user = this.nativS.getItem('user');
-        
+
         let myHeaders: Headers = new Headers;
+        
+        this.nativS.getItem('user')
+        .then((data) => {
+
+               console.log(data+' local storage');
+               console.log(data['token']);
+               console.log(data.token);
+               console.log(' local storage end');
+               this.userToken = data['token'];
+               
+            });
+        
         myHeaders.set('Content-Type', 'application/x-www-form-urlencoded');
-        myHeaders.set('Authorization', '12e63aefe5f656e62325e47a5792c2b9');
+        console.log(this.currentUser.token+" user token");
+        if(this.currentUser.token){
+            myHeaders.set('Authorization', this.currentUser.token);
+        }
+
+        // myHeaders.set('Authorization','12e63aefe5f656e62325e47a5792c2b9');
         this.options = new RequestOptions({ headers: myHeaders});
     }
 
@@ -55,6 +74,7 @@ export class Api {
 
     post(endpoint: string, body: any, ex_options?: any) {
          this.setHeaders();
+
         let params = new URLSearchParams();
         for(let key in body){
             if(Array.isArray(body[key])){
@@ -74,6 +94,7 @@ export class Api {
         }
 
         console.log(this.options);
+        console.log(endpoint);
         this.httpCallRequested();
         return this.http.post(this.url + '/' + endpoint, params, this.options)
         .finally(() => {

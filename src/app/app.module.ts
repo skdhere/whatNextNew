@@ -15,6 +15,7 @@ import { GoogleMaps } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { Device } from '@ionic-native/device';
+import { UserProvider } from '../providers/user';
 // import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -56,7 +57,8 @@ import { Device } from '@ionic-native/device';
     Api,
     Geolocation,
     BackgroundMode,
-    Device
+    Device,
+    UserProvider
   ]
 })
 export class AppModule {}
