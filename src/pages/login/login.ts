@@ -52,9 +52,13 @@ export class LoginPage {
                    
 
                     user.loginFlag   = "facebook";
+                    let device       = this.device;
+                    let dev       = {"uuid":device.cordova,"isVirtual":device.isVirtual};
+
                     user.device_info = this.device;
 
                    this.token = '';
+
                    this.nativeStorage.setItem('user',
                     {
                         name: user.name,
@@ -72,7 +76,7 @@ export class LoginPage {
                      console.log("=============");
                      console.log(user);
                      console.log("=============");
-                     
+
                     this.api.post('login',user)
                     .map(res => res.json())
                     .subscribe( data => {
