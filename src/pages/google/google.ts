@@ -10,6 +10,9 @@ import {
     LoadingController
 } from 'ionic-angular';
 import {
+    NativeStorage
+} from '@ionic-native/native-storage';
+import {
     Http,
     Response
 } from '@angular/http';
@@ -32,6 +35,9 @@ import {
     MarkerOptions,
     Marker
 } from '@ionic-native/google-maps';
+import { 
+    UserProvider
+} from '../../providers/user';
 
 @IonicPage()
 @Component({
@@ -56,8 +62,20 @@ export class GooglePage {
         private backgroundMode: BackgroundMode,
         public api: Api,
         public menu: MenuController,
-        public loadingCtrl :LoadingController
+        public loadingCtrl :LoadingController,
+        public currentUser: UserProvider,
+        public nativeStorage: NativeStorage
     ) {
+         this.nativeStorage.getItem('user')
+                .then((user_data) => {
+                    console.log(user_data);
+                    this.currentUser.setUser(
+                        user_data.name,
+                        user_data.token,
+                        user_data.token
+                    );
+
+                },err=>{});
          this.getLocation();
     }
 

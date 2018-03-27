@@ -25,6 +25,7 @@ import {
 import {
     UserProvider
 } from "../providers/user";
+
 // template: 'app.html'
 @Component({
     templateUrl: 'app.html'
@@ -62,13 +63,20 @@ export class MyApp {
             // Here we will check if the user is already logged in
             // because we don't want to ask users to log in each time they open the app
             this.nativeStorage.getItem('user')
-                .then((data) => {
-                    console.log(data);
+                .then((user_data) => {
+                    console.log(user_data);
                     //==============Start Api=========================//
                     this.api.post('checkUserInterest', '')
                         .map(res => res.json())
                         .subscribe(data => {
-                            //store data in storage
+
+                            console.log('New Token : '+user_data.token);
+                            this.currentUser.setUser(
+                                user_data.name,
+                                user_data.token,
+                                user_data.token
+                            );
+
                             if (data.success == true) {
                                 this.nav.setRoot('GooglePage');
                             } else {
