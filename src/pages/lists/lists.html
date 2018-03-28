@@ -11,8 +11,12 @@
 
 
 <ion-content padding>
+<div *ngIf="types.length ==0" class="no-more-item">
+    <h6>Please select your interest first.</h6>
+    <button style="padding: 10px" (click)="goTo('AddMoreIntPage')"> Add Interest</button>
+</div>
 <ion-list>
-        <ion-item *ngFor='let value of locations; trackBy: index;' (click)="viewList(value.name)">
+        <ion-item *ngFor='let value of locations; trackBy: index;' (click)="viewList(value)">
         	<ion-icon  item-start>
         		<img src="{{value.icon}}" style="width: 25px">
         	</ion-icon>

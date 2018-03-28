@@ -56,7 +56,11 @@ export class AddMoreIntPage {
       });
       //==============End Api=========================//
       console.log(this.interests);
-      loading.dismiss();
+
+      setTimeout(() => {
+            loading.dismiss();
+        }, 300);
+      
   }
 
   getLoader()

@@ -37,25 +37,28 @@ export class MyinterestPage {
 
   loadData()
   {
+
     this.interests = [];
     let loading = this.getLoader();
     loading.present();
+     console.log(this.interests);
   	//==============Start Api=========================//
   	this.api.post('getUserInterestDetail','')
         .map(res => res.json())
         .subscribe( data => {
             //store data in storage
-            console.log(data);
+            console.log(data+" cheking 2");
             if (data.success == true) {
 
+               console.log(data.data);
                let new_data = data.data;
                for(let i=0;i<new_data.length;i++)
                {
                	console.log(new_data[i]['name']);
                	 let int = {"id":new_data[i]['id'],"name":new_data[i]['name'],"display_name":new_data[i]['display_name']};
-
-               	 this.interests.push(int);
+                 this.interests.push(int);
                }
+                console.log(this.interests+" checking 4");
             }
             else{
               
@@ -80,11 +83,13 @@ export class MyinterestPage {
     this.api.post('deleteInterest',{'interest_id':int_id})
         .map(res => res.json())
         .subscribe( data => {
+            console.log(data+" cheking 1");
             this.loadData()
         }, error => {
       });
       //==============End Api=========================//
       loading.dismiss();
+      console.log(this.interests);
   }
 
   addMore()

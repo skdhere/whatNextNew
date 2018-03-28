@@ -56,15 +56,18 @@ export class ListsPage {
     return loading;
   }
 
+  goTo(page)
+  {
+    this.navCtrl.push(page);
+  }
 
-
-  viewList(name)
+  viewList(val)
   {
     this.loading = this.getLoader();
     this.loading.present();
-
+    let tle = val.name+' ('+val.type+')';
   	let actionSheet = this.actionSheet.create({
-     title: name,
+     title: tle,
      buttons: [
        {
          text: 'Create Circle',
@@ -108,7 +111,12 @@ export class ListsPage {
           .map(res => res.json())
           .subscribe( data => {
               //store data in storage
-              this.types = data.data;
+              console.log(data);
+              if(data.success==true)
+              {
+                 this.types = data.data;
+              }
+             
               this.loadPoint();
           }, error => {
         });

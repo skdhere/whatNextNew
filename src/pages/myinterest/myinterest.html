@@ -1,38 +1,42 @@
 <ion-header>
-  <ion-toolbar color="app">
-  	<button ion-button menuToggle>
+    <ion-toolbar color="app">
+        <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>
-      Interests
-    </ion-title>
-  </ion-toolbar>
+        </button>
+        <ion-title>
+            Interests
+        </ion-title>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-    <ion-list>
-      <br>
-      <ion-list-header>
-        Your Interest Categories
-      </ion-list-header>
-     
-      <ion-item-sliding *ngFor='let value of interests; trackBy: index;'>
-      	 <ion-item>
-      		<ion-label>{{value.display_name}}</ion-label>
-         </ion-item>
-       
-        <!-- checked="true" -->
-        <ion-item-options>
-            <button ion-button color="danger" icon-start (click)="deleteItem(value.id)">
-                <ion-icon name="trash"></ion-icon>
-                Delete
-            </button>
-        </ion-item-options>
-      </ion-item-sliding>
-  </ion-list>
-  <ion-fab top right edge>
-    <button (click)="addMore()" ion-fab color="secondary">
-      <ion-icon name="md-add" ></ion-icon>
-    </button>
-  </ion-fab>
+<ion-content class="pading-lr">
+    <div *ngIf="interests.length ==0" class="no-more-item">
+        <h6>No more Interest available.</h6>
+    </div>
+    <ion-list no-lines class="pading-lr">
+        <br>
+        <ion-list-header no-lines *ngIf="interests.length !=0">
+            Your Interest Categories
+        </ion-list-header>
+
+        <ion-item-sliding *ngFor='let value of interests; trackBy: index;' class="">
+            <ion-item class="custom">
+                <ion-label>{{value.display_name}}</ion-label>
+            </ion-item>
+
+            <ion-item-options>
+                <button ion-button color="danger" icon-start (click)="deleteItem(value.id)">
+                    <ion-icon name="trash"></ion-icon>
+                    Delete
+                </button>
+            </ion-item-options>
+        </ion-item-sliding>
+
+    </ion-list>
+
+    <ion-fab top right edge>
+        <button (click)="addMore()" ion-fab color="secondary">
+            <ion-icon name="md-add"></ion-icon>
+        </button>
+    </ion-fab>
 </ion-content>

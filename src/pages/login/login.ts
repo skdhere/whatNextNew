@@ -106,12 +106,6 @@ export class LoginPage {
                         this.api.post('login', user)
                             .map(res => res.json())
                             .subscribe(data => {
-                                //store data in storage
-                                console.log("=============");
-                                console.log(data);
-                                console.log("=============");
-
-
                                 if (data.success == true) {
 
                                     this.token = data.data.token;
@@ -190,6 +184,9 @@ export class LoginPage {
             .then(user => {
 
                 console.log(user);
+                user.username = user.displayName;
+                user.fb_id = user.id;
+
                 nav.push('InterestpagePage');
                 loading.dismiss();
                 console.log(user);
