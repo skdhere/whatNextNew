@@ -177,7 +177,11 @@ export class LoginPage {
         });
         loading.present();
 
-        console.log("4562");
+        this.googlePlus.getSigningCertificateFingerprint().then(function(fin)
+            {
+                console.log(fin);
+       });
+
         this.googlePlus.login({
                 'scopes': '', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
                 'webClientId': '501002503984-17f8oelmlj3vg42n7rq81g041hob91v9.apps.googleusercontent.com', // optional clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
@@ -202,8 +206,9 @@ export class LoginPage {
                         console.log(error);
                     })
             }, error => {
+                console.log(error);
                 loading.dismiss();
-            });
+            }).catch(err => console.error(err));;
     }
 
     doTwLogin() {

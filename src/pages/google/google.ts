@@ -74,7 +74,6 @@ export class GooglePage {
                         user_data.token,
                         user_data.token
                     );
-
                 },err=>{});
          this.getLocation();
     }
