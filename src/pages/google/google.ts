@@ -7,7 +7,8 @@ import {
     NavParams,
     Platform,
     MenuController,
-    LoadingController
+    LoadingController,
+    AlertController
 } from 'ionic-angular';
 import {
     NativeStorage
@@ -38,6 +39,9 @@ import {
 import { 
     UserProvider
 } from '../../providers/user';
+import {
+    Diagnostic
+} from '@ionic-native/diagnostic';
 
 @IonicPage()
 @Component({
@@ -64,9 +68,11 @@ export class GooglePage {
         public menu: MenuController,
         public loadingCtrl :LoadingController,
         public currentUser: UserProvider,
-        public nativeStorage: NativeStorage
+        public nativeStorage: NativeStorage,
+        public diagnostic: Diagnostic,
+        public alertCtrl: AlertController
     ) {
-         this.nativeStorage.getItem('user')
+        this.nativeStorage.getItem('user')
                 .then((user_data) => {
                     console.log(user_data);
                     this.currentUser.setUser(
@@ -75,7 +81,37 @@ export class GooglePage {
                         user_data.token
                     );
                 },err=>{});
-         this.getLocation();
+
+
+            
+        this.checkLocation();
+    }
+
+    checkLocation()
+    {
+        this.diagnostic.isLocationEnabled().then(
+            (isAvailable) => {
+            if(!isAvailable)
+            {
+                let alert = this.alertCtrl.create({
+                title: 'Location is not available',
+                message: 'Please turn on the location!',
+                buttons: [
+                  {
+                    text: 'Ok',
+                    handler: () => {
+                      this.diagnostic.switchToLocationSettings();
+                    }
+                  }
+                ]
+              });
+              alert.present();
+            }
+        }).catch( (e) => {
+        console.log(e);
+        alert(JSON.stringify(e));
+        });
+        this.getLocation();
     }
 
     getLoader()

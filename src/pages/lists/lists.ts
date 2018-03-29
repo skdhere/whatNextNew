@@ -31,8 +31,8 @@ export class ListsPage {
               public api: Api,
               public actionSheet:ActionSheetController,
               public loadingCtrl :LoadingController) {
-  	this.current_lat ="19.019552";
-  	this.current_lng ="72.8382497";
+  	// this.current_lat ="19.019552";
+  	// this.current_lng ="72.8382497";
     // this.loadPoint();
          
 
@@ -131,7 +131,9 @@ export class ListsPage {
       types.forEach(element => {
           this.http.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+this.current_lat+','+this.current_lng+'&radius=500&type='+element+'&key=%20AIzaSyBg1KqM98DIC8TA1ngpS3luuP1A-_aQsfg').map(res => res.json()).subscribe(data => {
               Object.keys(data.results).forEach(key=> {
-                let lat ={"lat":data.results[key]['geometry']['location'].lat,"lng":data.results[key]['geometry']['location'].lng,'type':element,'name':data.results[key]['name'],'icon':data.results[key]['icon']};
+
+                let distance = this.distance(this.current_lat,this.current_lng,data.results[key]['geometry']['location'].lat,data.results[key]['geometry']['location'].lng,'K');
+                let lat ={"distance":distance,"lat":data.results[key]['geometry']['location'].lat,"lng":data.results[key]['geometry']['location'].lng,'type':element,'name':data.results[key]['name'],'icon':data.results[key]['icon']};
                 this.locations.push(lat);
               });
           });
@@ -144,5 +146,19 @@ export class ListsPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ListsPage');
   }
+
+  distance(lat1:any, lon1:any, lat2:any, lon2:any, unit:string) {
+  let radlat1 = Math.PI * lat1/180
+  let radlat2 = Math.PI * lat2/180
+  let theta = lon1-lon2
+  let radtheta = Math.PI * theta/180
+  let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+  dist = Math.acos(dist)
+  dist = dist * 180/Math.PI
+  dist = dist * 60 * 1.1515
+  if (unit=="K") { dist = dist * 1.609344 }
+  if (unit=="N") { dist = dist * 0.8684 }
+  return dist.toFixed(2);
+}
 
 }

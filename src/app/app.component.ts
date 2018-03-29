@@ -5,7 +5,8 @@ import {
 import {
     Platform,
     Nav,
-    LoadingController
+    LoadingController,
+    AlertController 
 } from 'ionic-angular';
 import {
     NativeStorage
@@ -25,7 +26,8 @@ import {
 import {
     UserProvider
 } from "../providers/user";
-
+import { Diagnostic } from '@ionic-native/diagnostic';
+import { Network } from '@ionic-native/network';
 // template: 'app.html'
 @Component({
     templateUrl: 'app.html'
@@ -47,7 +49,10 @@ export class MyApp {
         public statusBar: StatusBar,
         public api: Api,
         public loadingCtrl:LoadingController,
-        public currentUser : UserProvider
+        public currentUser : UserProvider,
+        public diagnostic: Diagnostic,
+        public alertCtrl :AlertController,
+        public network : Network 
     ) {
         platform.ready().then(() => {
 
@@ -58,9 +63,27 @@ export class MyApp {
                 statusBar.overlaysWebView(false);
                 statusBar.overlaysWebView(true);
                 statusBar.backgroundColorByHexString("#33000000");
-            }, 300);
+            }, 400);
 
+
+            let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
+              let alert = this.alertCtrl.create({
+                title: 'Internet is not available',
+                message: 'Please turn on the data connection!',
+                buttons: [
+                  {
+                    text: 'Ok',
+                    handler: () => {
+                      this.diagnostic.switchToSettings();
+                    }
+                  }
+                ]
+              });
+              alert.present();
+            });
+            
             // Here we will check if the user is already logged in
+
             // because we don't want to ask users to log in each time they open the app
             this.nativeStorage.getItem('user')
                 .then((user_data) => {

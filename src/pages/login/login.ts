@@ -85,7 +85,7 @@ export class LoginPage {
                             "isVirtual": device.isVirtual
                         };
 
-                        user.device_info = this.device;
+                        user.device_info = dev;
                         user.username = user.name;
                         this.token = '';
                         user.fb_id = user.id;
@@ -172,36 +172,68 @@ export class LoginPage {
         loading.present();
 
         this.googlePlus.getSigningCertificateFingerprint().then(function(fin)
-            {
+       {
                 console.log(fin);
        });
 
         this.googlePlus.login({
                 'scopes': '', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-                'webClientId': '501002503984-17f8oelmlj3vg42n7rq81g041hob91v9.apps.googleusercontent.com', // optional clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
+                'webClientId': '72256662760-uijf6f9905djpj5667asjldfaulbr95k.apps.googleusercontent.com', // optional clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
                 'offline': true
             })
             .then(user => {
 
                 console.log(user);
                 user.username = user.displayName;
-                user.fb_id = user.id;
+                user.loginFlag = "google";
+
+                let device = this.device;
+                let dev = {
+                    "uuid": device.cordova,
+                    "isVirtual": device.isVirtual
+                };
+
+                user.device_info = dev;
+                user.gplus_id    = user.userId;
+
+                this.api.post('login', user)
+                    .map(res => res.json())
+                    .subscribe(data => {
+                        if (data.success == true) {
+
+                            this.token = data.data.token;
+
+                            this.nativeStorage.setItem('user', {
+                                    name: user.name,
+                                    gender: user.gender,
+                                    picture: user.picture,
+                                    loginFlag: 'facebook',
+                                    token: this.token
+                                })
+                                .then(() => {
+
+                                    this.currentUser.setUser(
+                                        user.name,
+                                        data.data.token,
+                                        data.data.token
+                                    );
+
+                                    setTimeout(() => {
+                                        this.setRoot();
+                                    }, 100);
+                                }, (error) => {
+                                    console.log(error);
+                                })
+                        } else {
+
+                        }
+                    }, error => {
+
+                    });
 
                 nav.push('InterestpagePage');
                 loading.dismiss();
-                console.log(user);
-                env.nativeStorage.setItem('user', {
-                        name: user.displayName,
-                        email: user.email,
-                        picture: user.imageUrl,
-                        gplus_id: '3',
-                        loginFlag: 'google'
-                    })
-                    .then(function() {
-                        this.setRoot();
-                    }, function(error) {
-                        console.log(error);
-                    })
+                
             }, error => {
                 console.log(error);
                 loading.dismiss();

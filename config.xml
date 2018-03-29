@@ -87,7 +87,6 @@
     </plugin>
     <plugin name="cordova-plugin-ionic-webview" spec="^1.1.16" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
-    <plugin name="cordova.plugins.diagnostic" spec="^4.0.3" />
     <plugin name="cordova-sqlite-storage" spec="^2.2.1" />
     <plugin name="cordova-plugin-background-mode" spec="^0.7.2" />
     <plugin name="cordova-plugin-googlemaps" spec="^2.2.8">
@@ -104,7 +103,9 @@
     </plugin>
     <plugin name="cordova-plugin-camera" spec="~4.0.2" />
     <plugin name="cordova-plugin-whitelist" spec="~1.3.3" />
+    <plugin name="cordova.plugins.diagnostic" spec="^4.0.3" />
+    <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
     <plugin name="cordova-plugin-googleplus" spec="^5.2.1">
-        <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.501002503984-17f8oelmlj3vg42n7rq81g041hob91v9" />
+        <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.uijf6f9905djpj5667asjldfaulbr95k-72256662760" />
     </plugin>
 </widget>

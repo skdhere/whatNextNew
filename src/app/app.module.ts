@@ -16,8 +16,9 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { Device } from '@ionic-native/device';
 import { UserProvider } from '../providers/user';
+import { Diagnostic } from '@ionic-native/diagnostic';
 // import { HttpClientModule } from '@angular/common/http';
-
+import { Network } from '@ionic-native/network';
 @NgModule({
   declarations: [
     MyApp
@@ -58,7 +59,9 @@ import { UserProvider } from '../providers/user';
     Geolocation,
     BackgroundMode,
     Device,
-    UserProvider
+    UserProvider,
+    Diagnostic,
+    Network
   ]
 })
 export class AppModule {}
