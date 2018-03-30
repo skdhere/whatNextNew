@@ -6,7 +6,8 @@ import {
     Platform,
     Nav,
     LoadingController,
-    AlertController 
+    AlertController ,
+    MenuController
 } from 'ionic-angular';
 import {
     NativeStorage
@@ -52,7 +53,8 @@ export class MyApp {
         public currentUser : UserProvider,
         public diagnostic: Diagnostic,
         public alertCtrl :AlertController,
-        public network : Network 
+        public network : Network,
+        public menuCtrl : MenuController
     ) {
         platform.ready().then(() => {
 

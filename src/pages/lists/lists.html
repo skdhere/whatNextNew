@@ -15,7 +15,7 @@
     <h6>Please select your interest first.</h6>
     <button style="padding: 10px" (click)="goTo('AddMoreIntPage')"> Add Interest</button>
 </div>
-<ion-list>
+<!-- <ion-list>
         <ion-item *ngFor='let value of locations; trackBy: index;' (click)="viewList(value)">
         	<ion-icon  item-start>
         		<img src="{{value.icon}}" style="width: 25px">
@@ -25,5 +25,17 @@
         	{{value.type}} {{value.lat}} , {{value.lng}} 
         	
         </ion-item>
-    </ion-list>
+    </ion-list> -->
+
+<ion-list>
+    <ion-item *ngFor='let value of locations; trackBy: index;' (click)="viewList(value)">
+    <ion-avatar item-start>
+      <img src="{{value.icon}}" style="width: 25px">
+    </ion-avatar>
+    <h2>{{value.name}} ({{value.type}}) </h2>
+    <h3>{{value.distance}} Km</h3>
+    <p>{{value.lat}} , {{value.lng}} </p>
+  </ion-item>
+</ion-list>
+
 </ion-content>
