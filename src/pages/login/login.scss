@@ -1,7 +1,8 @@
 page-login {
 
   .login-content{
-    background-color:  color($colors,app);
+   /* background-color:  color($colors,app);*/
+    background-image: url('../assets/bg.png');
   }
 
   .label-logo{
@@ -31,7 +32,7 @@ page-login {
   .bottom-row{
     vertical-align: middle;
     top: 40%;
-    margin-top: 25%;
+    margin-top: 5%;
     background: #fff;
     padding: 25px;
   }

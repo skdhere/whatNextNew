@@ -62,8 +62,11 @@ export class MyApp {
             
             setTimeout(() => {
                 statusBar.overlaysWebView(true);
-                statusBar.overlaysWebView(false);
-                statusBar.overlaysWebView(true);
+                // statusBar.overlaysWebView(false);
+
+                setTimeout(() => {
+                    statusBar.overlaysWebView(true);
+                }, 1000);
                 statusBar.backgroundColorByHexString("#33000000");
             }, 400);
 

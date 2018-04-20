@@ -185,13 +185,13 @@ export class GooglePage {
                 },
                 zoom: 18,
                 tilt: 30
-            },
-            gestures: {
-                rotate: false,
-                tilt: false,
-                scroll: false
             }
         };
+        // gestures: {
+        //     rotate: false,
+        //     tilt: false,
+        //     scroll: false
+        // }
         this.map = GoogleMaps.create('map_canvas', mapOptions);
         this.map.setVisible(true);
         
